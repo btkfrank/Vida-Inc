@@ -69,7 +69,7 @@ public class VisitManagerHandler implements VisitListener {
         attributes.setDepart(false);
         transmitters.put(name, attributes);
         System.out.println("queue length =" + transmitters.size());
-        this.activity.addDevice(transmitters);
+//        this.activity.addDevice(transmitters);
     }
 
     @Override
