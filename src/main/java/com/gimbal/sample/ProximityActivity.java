@@ -78,7 +78,7 @@ public class ProximityActivity extends Activity implements ProximityListener {
 	private SeekBar temperature;
 	private ColorPickerDialog colorPicker;
 	
-	private VisitManagerHandler manager;
+//	private VisitManagerHandler manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,14 +316,14 @@ public class ProximityActivity extends Activity implements ProximityListener {
     @Override
     public void serviceStarted() {
         Log.d(ProximityActivity.class.getSimpleName(), "serviceStarted");
-        if (manager == null) {
-            manager = new VisitManagerHandler();
+//        if (manager == null) {
+//            manager = new VisitManagerHandler();
 //            manager.init(this);
 //            adapter = new TransmitterListAdapter(this, this, manager);
 //            list.setAdapter(adapter);
-            manager.startScanning();
-        }
-//        showTransmitters();
+//            manager.startScanning();
+//        }
+        showTransmitters();
     }
 
     @Override
