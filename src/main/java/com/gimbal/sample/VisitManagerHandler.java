@@ -14,6 +14,7 @@
  */
 package com.gimbal.sample;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
@@ -34,7 +35,7 @@ public class VisitManagerHandler implements VisitListener {
 
     private static final String TAG = "VisitManagerHandler";
     
-    public static final String IP = "http://192.168.43.79:8000/api/";
+    public static final String IP = "http://172.20.10.7:8000/api/";
 
     private final LinkedHashMap<String, TransmitterAttributes> transmitters = new LinkedHashMap<String, TransmitterAttributes>();
     private final VisitManager visitManager = ProximityFactory.getInstance().createVisitManager();
@@ -86,22 +87,22 @@ public class VisitManagerHandler implements VisitListener {
     
     public void setLastStatus(String name, int rssi, TransmitterAttributes attributes){
     	if(transmitters.get(name) != null){
-	    	if(-transmitters.get(name).getRssi() < 65 && -rssi > 65){
-	    		this.sendRequest(transmitters.get(name), false);
-	    	}else if(-transmitters.get(name).getRssi() > 65 && -rssi < 65){
-	    		this.sendRequest(transmitters.get(name), true);
+	    	if(-transmitters.get(name).getRssi() < 70 && -rssi > 70){
+	    		this.sendRequest(transmitters.get(name), false, rssi);
+	    	}else if(-transmitters.get(name).getRssi() > 70 && -rssi < 70){
+	    		this.sendRequest(transmitters.get(name), true, rssi);
 	    	}
     	}else{
-    		if(-rssi > 65){
-	    		this.sendRequest(attributes, false);
-	    	}else if(-rssi < 65){
-	    		this.sendRequest(attributes, true);
+    		if(-rssi > 70){
+	    		this.sendRequest(attributes, false, rssi);
+	    	}else if(-rssi < 70){
+	    		this.sendRequest(attributes, true, rssi);
 	    	}
     	}
     	
     }
     
-    public void sendRequest(TransmitterAttributes attributes, boolean status){
+    public void sendRequest(TransmitterAttributes attributes, boolean status, int rssi){
         // The toggle is enabled
     	PostTask pt = new PostTask();
     	
@@ -114,6 +115,11 @@ public class VisitManagerHandler implements VisitListener {
 //			jsonObject.accumulate("rssi", attributes.getRssi());
 //			jsonObject.accumulate("batteryLevel", attributes.getBattery());
 			jsonObject.accumulate("deviceId", attributes.getIdentifier());
+
+			Calendar c = Calendar.getInstance(); 
+			int seconds = c.get(Calendar.SECOND);
+			
+			System.out.println("deviceId: " + attributes.getIdentifier() + ", inRange: " + status + ", rssi: " + rssi + ", time: " + seconds);
 			
         } catch (JSONException e) {
 			// TODO Auto-generated catch block

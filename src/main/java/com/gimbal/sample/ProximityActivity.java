@@ -25,11 +25,13 @@ import org.json.JSONObject;
 import afzkl.development.colorpickerview.dialog.ColorPickerDialog;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -42,7 +44,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-//import com.example.mvc.Model;
 import com.gimbal.logging.GimbalLogConfig;
 import com.gimbal.logging.GimbalLogLevel;
 import com.gimbal.proximity.Proximity;
@@ -54,7 +55,7 @@ public class ProximityActivity extends Activity implements ProximityListener {
 //    private static final String PROXIMITY_APP_ID = "274f18f1016e681194f92c796428836aee8e4a5ae2925cca796393290d0c01d1";
 //    private static final String PROXIMITY_APP_SECRET = "1c3104e7c1c67ea8906cdf3ad9f57a0d82eeb4107472d80906a5a1174e2879b4";
 	
-	public static final String IP = "http://192.168.43.79:8000/api/";
+	public static final String IP = "http://172.20.10.7:8000/api/";
 	
 	private static final String PROXIMITY_APP_ID = "399df86e9cb9f88d9ae92329958c49065d762aa3bea2b009f4c19ca2ea6f56a4";
     private static final String PROXIMITY_APP_SECRET = "b13f6eec245ce28b0de9b43c9c64d59a0dab300125207693b1fb7103fb12a6f4";
@@ -102,7 +103,15 @@ public class ProximityActivity extends Activity implements ProximityListener {
 		light = (Switch) findViewById(R.id.light);
 		lock = (Switch) findViewById(R.id.lock);		
 		temperature = (SeekBar) findViewById(R.id.temp);
-		temperature.setMax(15);		
+		temperature.setMax(15);
+		
+		Button colorButton = (Button) findViewById(R.id.color);		
+		colorButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickColorPickerDialog();
+			}
+		});
 		
 		final TextView t1 = (TextView) findViewById(R.id.textView3);        
         
@@ -118,41 +127,31 @@ public class ProximityActivity extends Activity implements ProximityListener {
                 if (isChecked) {
                     saveUserPreferrence(PROXIMITY_SERVICE_ENABLED_KEY, String.valueOf(true));
                     startProximityService();
+                }else{
+                	stopProximityService();
                 }
             }
         });
         
 		//		 create a controller for the button
 		getLightStatusButton.setOnClickListener(new OnClickListener() {
-
 			@Override
-			public void onClick(View v) {
-				 										
-	        	System.out.println(GetTask.connect(IP + "light/1"));	
-				
-				
+			public void onClick(View v) {				 										
+	        	System.out.println(GetTask.connect(IP + "light/1"));									
 			}
 		});
 		
 		getDoorStatusButton.setOnClickListener(new OnClickListener() {
-
 			@Override
-			public void onClick(View v) {
-				 										
+			public void onClick(View v) {				 										
 	        	System.out.println(GetTask.connect(IP + "door/1"));	
-				
-				
 			}
 		});
 		
 		getTempStatusButton.setOnClickListener(new OnClickListener() {
-
 			@Override
-			public void onClick(View v) {
-				 										
+			public void onClick(View v) {				 										
 	        	System.out.println(GetTask.connect( IP + "ac/1"));	
-				
-				
 			}
 		});
 		
@@ -160,10 +159,8 @@ public class ProximityActivity extends Activity implements ProximityListener {
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		        if (isChecked) {
 		            // The toggle is enabled
-		        	PostTask pt = new PostTask();
-		        	
-		        	JSONObject jsonObject = new JSONObject();
-		        	
+		        	PostTask pt = new PostTask();		        	
+		        	JSONObject jsonObject = new JSONObject();		        	
 		            try {
 						jsonObject.accumulate("ON", true);					
 //						jsonObject.accumulate("color", "#ffffff");
@@ -171,25 +168,20 @@ public class ProximityActivity extends Activity implements ProximityListener {
 		            } catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-		            
+					}		            
 		        	
 					pt.generateJsonObj(jsonObject); 										
 					pt.execute(IP + "light/1");		        	
 		        } else {
-		        	PostTask pt = new PostTask();
-		        	
-		        	JSONObject jsonObject = new JSONObject();
-		        	
+		        	PostTask pt = new PostTask();		        	
+		        	JSONObject jsonObject = new JSONObject();		        	
 		            try {
 						jsonObject.accumulate("ON", false);					
-//						jsonObject.accumulate("color", "#ffffff");
-						
+//						jsonObject.accumulate("color", "#ffffff");						
 		            } catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-		            
+					}		            
 		        	
 					pt.generateJsonObj(jsonObject); 										
 					pt.execute( IP + "light/1");		   
@@ -311,6 +303,13 @@ public class ProximityActivity extends Activity implements ProximityListener {
     private void startProximityService() {
         Log.d(ProximityActivity.class.getSimpleName(), "startSession");
         Proximity.startService(this);
+        
+    }
+    
+    private void stopProximityService() {
+        Log.d(ProximityActivity.class.getSimpleName(), "startSession");
+        Proximity.stopService();
+        
     }
 
     @Override
@@ -318,12 +317,8 @@ public class ProximityActivity extends Activity implements ProximityListener {
         Log.d(ProximityActivity.class.getSimpleName(), "serviceStarted");
         if (manager == null) {
             manager = new VisitManagerHandler();
-//            manager.init(this);
-//            adapter = new TransmitterListAdapter(this, this, manager);
-//            list.setAdapter(adapter);
             manager.startScanning();
         }
-//        showTransmitters();
     }
 
     @Override
@@ -361,15 +356,15 @@ public class ProximityActivity extends Activity implements ProximityListener {
         finish();
     }
 
-    void showAddTransmitters() {
-        Log.d(ProximityActivity.class.getSimpleName(), "session started callback"
-                + ProximityTransmittersActivity.class);
-
-        Intent intent = new Intent(
-                "com.example.sampleproximityusingapplication.ProximityTransmittersActivity");
-        startActivity(intent);
-        finish();
-    }
+//    void showAddTransmitters() {
+//        Log.d(ProximityActivity.class.getSimpleName(), "session started callback"
+//                + ProximityTransmittersActivity.class);
+//
+//        Intent intent = new Intent(
+//                "com.example.sampleproximityusingapplication.ProximityTransmittersActivity");
+//        startActivity(intent);
+//        finish();
+//    }
 
     private void showToastMessage(final String message) {
         runOnUiThread(new Runnable() {
@@ -380,5 +375,71 @@ public class ProximityActivity extends Activity implements ProximityListener {
             }
         });
     }
+    
+
+	public void onClickColorPickerDialog() {
+		//The color picker menu item as been clicked. Show 
+		//a dialog using the custom ColorPickerDialog class.
+		
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		int initialValue = prefs.getInt("color_2", 0xFF000000);
+		
+		Log.d("mColorPicker", "initial value:" + initialValue);
+				
+		final ColorPickerDialog colorDialog = new ColorPickerDialog(this, initialValue);
+		
+		colorDialog.setAlphaSliderVisible(true);
+		colorDialog.setTitle("Pick a Color!");
+		
+		colorDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Toast.makeText(ProximityActivity.this, "Selected Color: " + "#"+ colorToHexString(colorDialog.getColor()).substring(3), Toast.LENGTH_LONG).show();
+							
+				//Save the value in our preferences.
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putInt("color_2", colorDialog.getColor());
+				editor.commit();
+			        
+	            // The toggle is enabled
+//	        	PostTask pt = new PostTask();					 
+//				pt.setKeyValue("Color", "#"+colorToHexString(colorDialog.getColor()).substring(3)); 										
+//				pt.execute();
+				
+				PostTask pt = new PostTask();
+	        	
+	        	JSONObject jsonObject = new JSONObject();
+	        	
+	            try {
+					jsonObject.accumulate("ON", true);					
+					jsonObject.accumulate("color", colorToHexString(colorDialog.getColor()).substring(3));
+					
+	            } catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	            
+	        	
+				pt.generateJsonObj(jsonObject); 										
+				pt.execute(IP + "light/1");		
+				
+			}
+		});
+		
+		colorDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//Nothing to do here.
+			}
+		});
+		
+		colorDialog.show();
+	}
+	
+	private String colorToHexString(int color) {
+		return String.format("#%06X", 0xFFFFFFFF & color);
+	}
+
 
 }
