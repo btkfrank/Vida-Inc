@@ -55,7 +55,7 @@ public class ProximityActivity extends Activity implements ProximityListener {
 //    private static final String PROXIMITY_APP_ID = "274f18f1016e681194f92c796428836aee8e4a5ae2925cca796393290d0c01d1";
 //    private static final String PROXIMITY_APP_SECRET = "1c3104e7c1c67ea8906cdf3ad9f57a0d82eeb4107472d80906a5a1174e2879b4";
 	
-	public static final String IP = "http://172.20.10.7:8000/api/";
+	public static final String IP = "http://192.168.43.79:8000/api/";
 	
 	private static final String PROXIMITY_APP_ID = "399df86e9cb9f88d9ae92329958c49065d762aa3bea2b009f4c19ca2ea6f56a4";
     private static final String PROXIMITY_APP_SECRET = "b13f6eec245ce28b0de9b43c9c64d59a0dab300125207693b1fb7103fb12a6f4";
@@ -68,16 +68,25 @@ public class ProximityActivity extends Activity implements ProximityListener {
     private Switch enableProximitySwitch;
     
     
-    private Model model;
-	private Button button;
-	private Button getLightStatusButton;
+//    private Model model;
+//	private Button button;
+    private Switch light2998;
+    private Button color2998;	
+	private Button getLight2998Status;
+	
+	private Switch light2356;
+    private Button color2356;	
+	private Button getLight2356Status;
+	
+	private Switch light1937;
+    private Button color1937;	
+	private Button getLight1937Status;
+	
 	private Button getDoorStatusButton;
-	private Button getTempStatusButton;
-	private Button colorButton;
-	private Switch light;
+	private Button getTempStatusButton;	
 	private Switch lock;
 	private SeekBar temperature;
-	private ColorPickerDialog colorPicker;
+//	private ColorPickerDialog colorPicker;
 	
 	private VisitManagerHandler manager;
 
@@ -94,32 +103,79 @@ public class ProximityActivity extends Activity implements ProximityListener {
         
         setContentView(view);
 
-        initializeProximity();
-        
-        getLightStatusButton = (Button) findViewById(R.id.LightGetstatus);
+        initializeProximity();                		
+		
+		light2998 = (Switch) findViewById(R.id.light2998);
+		getLight2998Status = (Button) findViewById(R.id.light2998GetStatus);
+		color2998 = (Button) findViewById(R.id.color2998);
+		
+		light2356 = (Switch) findViewById(R.id.light2356);
+		getLight2356Status = (Button) findViewById(R.id.light2356GetStatus);
+		color2356 = (Button) findViewById(R.id.color2356);
+		
+		light1937 = (Switch) findViewById(R.id.light1937);
+		getLight1937Status = (Button) findViewById(R.id.light1937GetStatus);
+		color1937 = (Button) findViewById(R.id.color1937);
+		
+		lock = (Switch) findViewById(R.id.lock);
 		getDoorStatusButton = (Button) findViewById(R.id.DoorGetStatus);
-		getTempStatusButton = (Button) findViewById(R.id.TemperatureGetStatus);
-		colorButton = (Button) findViewById(R.id.color);
-		light = (Switch) findViewById(R.id.light);
-		lock = (Switch) findViewById(R.id.lock);		
+		
 		temperature = (SeekBar) findViewById(R.id.temp);
 		temperature.setMax(15);
+		getTempStatusButton = (Button) findViewById(R.id.TemperatureGetStatus);
 		
-		Button colorButton = (Button) findViewById(R.id.color);		
-		colorButton.setOnClickListener(new OnClickListener() {
+		light2998.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		    	switchLight(buttonView, isChecked, 2998);
+		    }
+		});
+				
+		color2998.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onClickColorPickerDialog();
+				onClickColorPickerDialog(2998);
 			}
 		});
 		
-		final TextView t1 = (TextView) findViewById(R.id.textView3);        
+		getLight2998Status.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				 										
+	        	System.out.println(GetTask.connect(IP + "light"));									
+			}
+		});
+		
+		
+		
+		light2356.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		    	switchLight(buttonView, isChecked, 2356);
+		    }
+		});
+				
+		color2356.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickColorPickerDialog(2356);
+			}
+		});
+		
+		light1937.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		    	switchLight(buttonView, isChecked, 1937);
+		    }
+		});
+				
+		color1937.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickColorPickerDialog(1937);
+			}
+		});
+		
+		final TextView tempSetiing = (TextView) findViewById(R.id.temperature);        
         
-        String proximityServiceEnabled = getUserPreference(PROXIMITY_SERVICE_ENABLED_KEY);
-//        if (proximityServiceEnabled != null && Boolean.valueOf(proximityServiceEnabled)) {
-//            startProximityService();
-//        }
-
+//      String proximityServiceEnabled = getUserPreference(PROXIMITY_SERVICE_ENABLED_KEY);
+        
         enableProximitySwitch = (Switch) view.findViewById(R.id.enableProximitySwitch);
         enableProximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -132,61 +188,19 @@ public class ProximityActivity extends Activity implements ProximityListener {
                 }
             }
         });
-        
-		//		 create a controller for the button
-		getLightStatusButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {				 										
-	        	System.out.println(GetTask.connect(IP + "light/1"));									
-			}
-		});
 		
 		getDoorStatusButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {				 										
-	        	System.out.println(GetTask.connect(IP + "door/1"));	
+	        	System.out.println(GetTask.connect(IP + "door"));	
 			}
 		});
 		
 		getTempStatusButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {				 										
-	        	System.out.println(GetTask.connect( IP + "ac/1"));	
+	        	System.out.println(GetTask.connect( IP + "ac"));	
 			}
-		});
-		
-		light.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		        if (isChecked) {
-		            // The toggle is enabled
-		        	PostTask pt = new PostTask();		        	
-		        	JSONObject jsonObject = new JSONObject();		        	
-		            try {
-						jsonObject.accumulate("ON", true);					
-//						jsonObject.accumulate("color", "#ffffff");
-						
-		            } catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}		            
-		        	
-					pt.generateJsonObj(jsonObject); 										
-					pt.execute(IP + "light/1");		        	
-		        } else {
-		        	PostTask pt = new PostTask();		        	
-		        	JSONObject jsonObject = new JSONObject();		        	
-		            try {
-						jsonObject.accumulate("ON", false);					
-//						jsonObject.accumulate("color", "#ffffff");						
-		            } catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}		            
-		        	
-					pt.generateJsonObj(jsonObject); 										
-					pt.execute( IP + "light/1");		   
-		        }
-		    }
 		});
 				
 		lock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -206,7 +220,6 @@ public class ProximityActivity extends Activity implements ProximityListener {
 					}		            
 		        	
 					pt.generateJsonObj(jsonObject); 										
-					pt.execute( IP + "/door/1");			        	
 		        } else {
 		        	PostTask pt = new PostTask();
 		        	
@@ -214,16 +227,13 @@ public class ProximityActivity extends Activity implements ProximityListener {
 		        	
 		            try {
 						jsonObject.accumulate("ON", false);					
-						
-						
 		            } catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-		            
-		        	
+		            		        	
 					pt.generateJsonObj(jsonObject); 										
-					pt.execute(IP + "door/1");		   
+					pt.execute(IP + "door");		   
 		        }
 		    }
 		});
@@ -233,42 +243,35 @@ public class ProximityActivity extends Activity implements ProximityListener {
 		    @Override       
 		    public void onStopTrackingTouch(SeekBar seekBar) {      
 		        // TODO Auto-generated method stub		    	
-				String value = t1.getText().toString();				 
+				String value = tempSetiing.getText().toString();				 
 
-				// The toggle is enabled
-	        	PostTask pt = new PostTask();
-	        	
+	        	PostTask pt = new PostTask();	        	
 	        	JSONObject jsonObject = new JSONObject();
 	        	
 	            try {
 					jsonObject.accumulate("ON", true);					
-					jsonObject.accumulate("Temperature", value);
-					
+					jsonObject.accumulate("Temperature", value);					
 	            } catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}	            
-	        	
+				}	            	        	
 				pt.generateJsonObj(jsonObject); 										
-				pt.execute( IP + "ac/1");
-				
+				pt.execute( IP + "ac");				
 		    }       
 
 		    @Override       
 		    public void onStartTrackingTouch(SeekBar seekBar) {     
-		        // TODO Auto-generated method stub		    	
-		    	
+		        // TODO Auto-generated method stub		    			    	
 		    }       
 
 		    @Override       
 		    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { 
 	    	    // TODO Auto-generated method stub 
-		    	t1.setText(String.valueOf(progress+15)); 
+		    	tempSetiing.setText(String.valueOf(progress+15)); 
 		    } 
 		});
         
     }
-
+        
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "received callback for activity result with request code " + requestCode
@@ -302,14 +305,12 @@ public class ProximityActivity extends Activity implements ProximityListener {
 
     private void startProximityService() {
         Log.d(ProximityActivity.class.getSimpleName(), "startSession");
-        Proximity.startService(this);
-        
+        Proximity.startService(this);        
     }
     
     private void stopProximityService() {
         Log.d(ProximityActivity.class.getSimpleName(), "startSession");
-        Proximity.stopService();
-        
+        Proximity.stopService();        
     }
 
     @Override
@@ -356,16 +357,6 @@ public class ProximityActivity extends Activity implements ProximityListener {
         finish();
     }
 
-//    void showAddTransmitters() {
-//        Log.d(ProximityActivity.class.getSimpleName(), "session started callback"
-//                + ProximityTransmittersActivity.class);
-//
-//        Intent intent = new Intent(
-//                "com.example.sampleproximityusingapplication.ProximityTransmittersActivity");
-//        startActivity(intent);
-//        finish();
-//    }
-
     private void showToastMessage(final String message) {
         runOnUiThread(new Runnable() {
 
@@ -376,10 +367,66 @@ public class ProximityActivity extends Activity implements ProximityListener {
         });
     }
     
+    public void switchLight(CompoundButton buttonView, boolean isChecked, int lightId) {
+        if (isChecked) {
+            // The toggle is enabled
+        	PostTask pt = new PostTask();		        	
+        	JSONObject jsonObject = new JSONObject();		        	
+            try {
+				jsonObject.accumulate("ON", true);					
+				jsonObject.accumulate("deviceId", lightId);
+				jsonObject.accumulate("color", "ffffff");
+            } catch (JSONException e) {
+				e.printStackTrace();
+			}		            
+        	
+			pt.generateJsonObj(jsonObject); 										
+			pt.execute(IP + "light");		        	
+        } else {
+        	PostTask pt = new PostTask();		        	
+        	JSONObject jsonObject = new JSONObject();		        	
+            try {
+				jsonObject.accumulate("ON", false);					
+				jsonObject.accumulate("deviceId", lightId);
+				jsonObject.accumulate("color", "ffffff");
+            } catch (JSONException e) {
+				e.printStackTrace();
+			}		            
+        	
+			pt.generateJsonObj(jsonObject); 										
+			pt.execute( IP + "light");		   
+        }
+    }
+    
+    public void pickColor(ColorPickerDialog colorDialog, SharedPreferences prefs, int lightId) {
+		
+		Toast.makeText(ProximityActivity.this, "Selected Color: " + "#"+ colorToHexString(colorDialog.getColor()).substring(3), Toast.LENGTH_LONG).show();
+					
+		//Save the value in our preferences.
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putInt("color_2", colorDialog.getColor());
+		editor.commit();
+	        
+		PostTask pt = new PostTask();
+    	
+    	JSONObject jsonObject = new JSONObject();
+    	
+        try {
+			jsonObject.accumulate("ON", true);					
+			jsonObject.accumulate("color", colorToHexString(colorDialog.getColor()).substring(3));
+			jsonObject.accumulate("deviceId", lightId);
+			
+        } catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	            
+    	
+		pt.generateJsonObj(jsonObject); 										
+		pt.execute(IP + "light");		
+		
+	}
 
-	public void onClickColorPickerDialog() {
-		//The color picker menu item as been clicked. Show 
-		//a dialog using the custom ColorPickerDialog class.
+	public void onClickColorPickerDialog(final int lightId) {
 		
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		int initialValue = prefs.getInt("color_2", 0xFF000000);
@@ -394,34 +441,8 @@ public class ProximityActivity extends Activity implements ProximityListener {
 		colorDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 			
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Toast.makeText(ProximityActivity.this, "Selected Color: " + "#"+ colorToHexString(colorDialog.getColor()).substring(3), Toast.LENGTH_LONG).show();
-							
-				//Save the value in our preferences.
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putInt("color_2", colorDialog.getColor());
-				editor.commit();
-			        
-	            // The toggle is enabled
-//	        	PostTask pt = new PostTask();					 
-//				pt.setKeyValue("Color", "#"+colorToHexString(colorDialog.getColor()).substring(3)); 										
-//				pt.execute();
-				
-				PostTask pt = new PostTask();
-	        	
-	        	JSONObject jsonObject = new JSONObject();
-	        	
-	            try {
-					jsonObject.accumulate("ON", true);					
-					jsonObject.accumulate("color", colorToHexString(colorDialog.getColor()).substring(3));
-					
-	            } catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}	            
-	        	
-				pt.generateJsonObj(jsonObject); 										
-				pt.execute(IP + "light/1");		
+			public void onClick(DialogInterface dialog, int which) {				
+				pickColor(colorDialog, prefs, lightId);
 				
 			}
 		});

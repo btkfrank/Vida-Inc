@@ -41,13 +41,41 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:orientation="vertical" >
-            
-             <Switch
-		        android:id="@+id/light"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_alignLeft="@+id/lock"
-		        android:text="Light" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" >
+
+                    <Switch
+                        android:id="@+id/light2998"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2998" />
+
+                    <Button
+                        android:id="@+id/light2998GetStatus"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:text="get status" />
+
+                    <Button
+                        android:id="@+id/color2998"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="5dp"
+                        android:text="Color" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
 		    <!--
 		         <Button
@@ -62,61 +90,136 @@
 		        android:textSize="20pt" />
 		    -->
 
-             <Button
-                 android:id="@+id/LightGetstatus"
-                 style="?android:attr/buttonStyleSmall"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:minHeight="40dp"
-                 android:text="light get status" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-             <Button
-                 android:id="@+id/color"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginBottom="5dp"
-                 android:text="Color" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" >
 
-             <TextView
-                 android:id="@+id/textView3"
-                 android:layout_width="64dp"
-                 android:layout_height="wrap_content"
-                 android:text="Temp"
-                 android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <Switch
+                        android:id="@+id/light2356"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2356" />
 
-             <SeekBar
-                 android:id="@+id/temp"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="5dp"
-                  />
+                    <Button
+                        android:id="@+id/light2356GetStatus"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:text="get status" />
 
-             <Button
-                 android:id="@+id/TemperatureGetStatus"
-                 style="?android:attr/buttonStyleSmall"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="5dp"
-                 android:minHeight="40dp"
-                 android:text="temp get status" />
+                    <Button
+                        android:id="@+id/color2356"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Color" />
+                </LinearLayout>
+            </RelativeLayout>
 
-             <Switch
-                 android:id="@+id/lock"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="5dp"
-                 android:text="Lock" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-		    <Button
-		        android:id="@+id/DoorGetStatus"
-		        style="?android:attr/buttonStyleSmall"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_alignBaseline="@+id/lock"
-		        android:layout_alignBottom="@+id/lock"
-		        android:layout_alignLeft="@+id/LightGetstatus"
-		        android:minHeight="40dp"
-		        android:text="light get status" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" >
+
+                    <Switch
+                        android:id="@+id/light1937"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1937" />
+
+                    <Button
+                        android:id="@+id/light1937GetStatus"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:text="get status" />
+
+                    <Button
+                        android:id="@+id/color1937"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Color" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" >
+
+                    <TextView
+                        android:id="@+id/temperature"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:text="Temp"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <SeekBar
+                        android:id="@+id/temp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/TemperatureGetStatus"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:minHeight="40dp"
+                        android:text="get status" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" >
+
+                    <Switch
+                        android:id="@+id/lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Lock" />
+
+                    <Button
+                        android:id="@+id/DoorGetStatus"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:text="door get status" />
+
+                </LinearLayout>
+            </RelativeLayout>
             
 
             <TextView
@@ -134,6 +237,7 @@
                 android:checked="false"
                 android:gravity="center_horizontal"
                 android:text="@string/enable_proximity_switch" />
+
         </LinearLayout>
         
         

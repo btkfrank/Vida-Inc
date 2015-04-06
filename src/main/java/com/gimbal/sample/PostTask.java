@@ -36,7 +36,7 @@ public class PostTask extends AsyncTask<String, String, String>{
             // Execute HTTP Post Request
             response = httpclient.execute(httppost);
             
-            System.out.println(inputStreamToString(response.getEntity().getContent()));
+            System.out.println("send"+inputStreamToString(response.getEntity().getContent()));
             
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block

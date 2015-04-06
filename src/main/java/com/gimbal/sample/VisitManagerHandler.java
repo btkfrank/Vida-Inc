@@ -35,7 +35,7 @@ public class VisitManagerHandler implements VisitListener {
 
     private static final String TAG = "VisitManagerHandler";
     
-    public static final String IP = "http://172.20.10.7:8000/api/";
+    public static final String IP = "http://192.168.43.79:8000/api/";
 
     private final LinkedHashMap<String, TransmitterAttributes> transmitters = new LinkedHashMap<String, TransmitterAttributes>();
     private final VisitManager visitManager = ProximityFactory.getInstance().createVisitManager();
