@@ -375,7 +375,7 @@ public class ProximityActivity extends Activity implements ProximityListener {
             try {
 				jsonObject.accumulate("ON", true);					
 				jsonObject.accumulate("deviceId", lightId);
-				jsonObject.accumulate("color", "ffffff");
+				jsonObject.accumulate("color", "ff0000");
             } catch (JSONException e) {
 				e.printStackTrace();
 			}		            
